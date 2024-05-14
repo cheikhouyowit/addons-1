@@ -1,0 +1,253 @@
+<odoo>
+<!-- This Menu Item must have a parent and an action -->
+
+         <record id="mesures_view_menu" model="ir.ui.view">
+            <field name="name">liste.mesures</field>
+            <field name="model">order.mesure</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree  string="Liste des mesures">
+                    <field name="name"/>
+                     <field name="sexe"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Menu/action mesure-->
+      <record id="mesures_action" model="ir.actions.act_window">
+    <field name="name">Mesures</field>
+    <field name="res_model">order.mesure</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="mesures_view_menu"/>
+    <field name="target">current</field>
+   
+</record>
+
+
+    <record id="mesures_view_menu" model="ir.ui.view">
+            <field name="name">liste.mesures</field>
+            <field name="model">order.mesure</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Liste des mesures">
+                    <field name="name"/>
+                    <field name="sexe"/>
+                </tree>
+            </field>
+        </record>
+
+
+    <!--Formulaire de création des mesures-->
+     <record id="mesures_form" model="ir.ui.view">
+            <field name="name">mesures.form</field>
+            <field name="model">order.mesure</field>
+            <field name="arch" type="xml">
+                <form string="Mesures">
+                      <group name="grp1" >
+                         <group name="grp11" string="Mesures">
+                             <field name="name"/>
+                             <field name="sexe"/>
+                         
+                             <field name="L_Epaul" invisible="sexe == 'f'"/>
+                             <field name="T_Cou" invisible="sexe == 'f'" />
+                             <field name="C_Bat" invisible="sexe == 'h'"/>
+                             <field name="V_Pince" invisible="sexe == 'h'"/>
+                             <field name="AT_Poitr" invisible="sexe == 'h'"/>
+                             <field name="T_Poitr" invisible="sexe == 'f'" />
+                             <field name="T_Taille" invisible="sexe == 'f'" />
+                             <field name="Ceint" invisible="sexe == 'f'" />
+                             <field name="T_Bn" invisible="sexe == 'h'"/>
+                             <field name="T_Hanc" invisible="sexe == 'f'" />
+                             <field name="L_Manc" invisible="sexe == 'f'" />
+                             <field name="L_Manch3_4" invisible="sexe == 'f'" />
+                             <field name="T_Bras" invisible="sexe == 'f'" />
+                             <field name="T_Poignet" invisible="sexe == 'f'" />
+                        </group>
+                          <group name="grp12" string="Mesures">
+                              <field name="T_Cuisse" invisible="sexe == 'f'" />
+                              <field name="L_Genoux" invisible="sexe == 'f'" />
+                              <field name="L_3_4" invisible="sexe == 'f'" />
+                              <field name="M_courte" invisible="sexe == 'h'"/>
+                              <field name="L_Haut" invisible="sexe == 'f'" />
+                              <field name="L_Jupe" invisible="sexe == 'h'"/>
+                              <field name="LJ_crt" invisible="sexe == 'h'"/>
+                              <field name="L_Bas" invisible="sexe == 'f'" />
+                              <field name="L_Pant" invisible="sexe == 'f'" />
+                              <field name="L_T" invisible="sexe == 'f'" />
+                              <field name="Carrure_dos" invisible="sexe == 'f'" />
+                              <field name="Carrure_devant" invisible="sexe == 'f'" />
+                              <field name="Longueur_dos" invisible="sexe == 'f'" />
+                              <field name="T_Chem" invisible="sexe == 'f'" />
+                              <field name="T_Pant" invisible="sexe == 'f'" />
+                              <field name="T_Veste" invisible="sexe == 'f'" />
+                              <field name="Broderie"/>
+                          </group>
+                        </group>
+
+                </form>
+            </field>
+        </record>
+
+     <!--Ajout champs mesures dans le formulaire client-->
+       <record id="partner_mesures_form" model="ir.ui.view">
+        <field name="name">mesure.client</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='internal_notes']" position="before">
+              <page name="mesures" string=" Mesures">
+                 <field name = "partner_mesure"/>
+              </page>
+            </xpath>
+            <xpath expr="//label[@for='street']" position="before">
+                <field name="s_couvert"/>
+            </xpath>
+         </field>
+        </record>
+
+   <record id="view_sc_search" model="ir.ui.view">
+        <field name="name">Recherche sous couvert</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="s_couvert" string="S/c de"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_mesures_form" model="ir.ui.view">
+        <field name="name">mesure.client.sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='price_unit']" position="after">
+              <field name="choixtissu"/>
+              <field name="choixmesure"/>
+              <field name = "mesures"/>
+          </xpath>
+        </field>
+       </record>
+
+
+     <record id="mrp_mesures_form" model="ir.ui.view">
+        <field name="name">mesure.client.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='bom_id']" position="before">
+                <field name = "sale_mesures"/>
+          </xpath>
+        </field>
+       </record>
+
+
+    <!--Vue Liste  des broderies-->
+    <record id="brod_view" model="ir.ui.view">
+        <field name="name">Liste des Broderies</field>
+        <field name="model">modele.broderie</field>
+        <field name="arch" type="xml">
+            <tree string="Liste des Broderie">
+                <field name="name"/>
+                <field name="image" widget="image" height="50"/>
+            </tree>
+        </field>
+    </record>
+    <!--Formulaire création/modification  des broderies-->
+    <record id="brod_form_view" model="ir.ui.view">
+        <field name="name">Formulaire broderie</field>
+        <field name="model">modele.broderie</field>
+        <field name="arch" type="xml">
+            <form string="Formulaire broderie">
+                <group name="grp11" string="Broderie">
+                    <field name="name"/>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!--Vue Liste  des Tissus-->
+    <record id="tissu_view" model="ir.ui.view">
+        <field name="name">Liste des Tissus</field>
+        <field name="model">modele.tissu</field>
+        <field name="arch" type="xml">
+            <tree string="Liste des Tissus">
+                <field name="name"/>
+                <field name="image" widget="image" height="50"/>
+            </tree>
+        </field>
+    </record>
+    <!--Formulaire création/modification  des Tissus-->
+    <record id="tissu_form_view" model="ir.ui.view">
+        <field name="name">Formulaire Tissu</field>
+        <field name="model">modele.tissu</field>
+        <field name="arch" type="xml">
+            <form string="Formulaire Tissu">
+                <group name="grp12" string="Base de données Tissu">
+                    <field name="name"/>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!--Vue Liste  des types de manches-->
+    <record id="poignet_view" model="ir.ui.view">
+        <field name="name">Liste des Manches</field>
+        <field name="model">modele.manche</field>
+        <field name="arch" type="xml">
+            <tree string="Liste des Manches">
+                <field name="name"/>
+                <field name="image" widget="image" height="50"/>
+            </tree>
+        </field>
+    </record>
+    <!--Formulaire création/modification  des types de poignet-->
+    <record id="poignet_form_view" model="ir.ui.view">
+        <field name="name">Création Manches </field>
+        <field name="model">modele.manche</field>
+        <field name="arch" type="xml">
+            <form string="Formulaire Manches">
+                <group name="grp13" string="Liste des Manches">
+                    <field name="name"/>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="brod_action" model="ir.actions.act_window">
+        <field name="name">Broderie</field>
+        <field name="res_model">modele.broderie</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="tissu_action" model="ir.actions.act_window">
+        <field name="name">Tissu</field>
+        <field name="res_model">modele.tissu</field>
+         <field name="view_id" ref="tissu_view"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <record id="manche_action" model="ir.actions.act_window">
+        <field name="name">Manches</field>
+        <field name="res_model">modele.manche</field>
+         <field name="view_id" ref="poignet_view"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+     <!--creation de menus pour les references-->
+    <menuitem id="refs_general" name="Configuration Atelier" parent="sale.sale_menu_root" sequence="9"/>
+    <menuitem id="modele_broderie" name="Broderie" parent="refs_general" sequence="13"
+              action="brod_action"/>
+    
+    <menuitem name="Mesures" id="menu_mesures" sequence="16" parent="refs_general" action="mesures_action"/>
+    <menuitem id="modele_tissu" name="Tissus" parent="refs_general" sequence="154"
+              action="tissu_action"/>
+    <menuitem id="modele_manche" name="Type de Manches" parent="refs_general" sequence="15"
+              action="manche_action"/>
+
+</odoo>
